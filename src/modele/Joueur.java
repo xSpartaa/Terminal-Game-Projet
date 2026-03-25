@@ -2,17 +2,19 @@ package modele;
 
 public class Joueur {
     public String nom;
-    private int partiGagner=0;
+    private int partiesGagnees = 0;
+    public boolean estIA; // Pour savoir si c'est l'ordinateur qui joue
 
-    public Joueur(String nom) {
+    public Joueur(String nom, boolean estIA) {
         this.nom = nom;
+        this.estIA = estIA;
     }
 
-    public int getPartiGagner() {
-        return partiGagner;
+    public int getPartiesGagnees() {
+        return partiesGagnees;
     }
 
-    public void setPartiGagner(int partiGagner) {
-        this.partiGagner = partiGagner;
+    public void setPartiesGagnees(int partiesGagnees) {
+        this.partiesGagnees = partiesGagnees;
     }
 }
