@@ -2,47 +2,36 @@ package vue;
 import java.util.Scanner;
 
 public class Ihm {
-
     public String getStringInput() {
         Scanner sc = new Scanner(System.in);
-        return sc.nextLine();
+        String input = sc.nextLine();
+        while (input.isEmpty()) {
+            print("Aucune valeur entrée , Recommencez votre choix : ");
+            input = sc.nextLine();
+        }
+        return input;
     }
 
     public int getIntInput() {
         try {
-            Scanner sc = new Scanner(System.in);
-            return Integer.parseInt(sc.nextLine());
-        } catch (Exception _) {
-            //Si type de valeur mauvaise renvoie le code d'erreur 404.
-            print("Votre valeur choisis n'est pas un numéro");
+            return Integer.parseInt(getStringInput());
+        } catch (Exception e) {
             return 404;
         }
     }
 
-    public void print(String text) {
-        System.out.println(text);
+    public void print(String texte) {
+        System.out.println(texte);
     }
 
-    public int[] choixCoup(String jeu) {
-        if (jeu.equals("Morpion")) {
-            String values = getStringInput();
-            String[] valuesArray = values.split(" ");
-            int row;
-            int col;
-            int[] coup = new int[2];
-            if (valuesArray.length == 2) {
-                row = Integer.parseInt(valuesArray[0]);
-                col = Integer.parseInt(valuesArray[1]);
-                coup[0] = row;
-                coup[1] = col;
-                return coup;
-            } else return coup;
+    public int[] choixCoup(String jeuNom) {
+        if (jeuNom.equals("Morpion")) {
+            String[] saisie = getStringInput().split(" ");
+            if (saisie.length == 2) return new int[]{Integer.parseInt(saisie[0]), Integer.parseInt(saisie[1])};
+            if (saisie[0].equals("999")) return new int[]{999, 999};
+        } else {
+            return new int[]{getIntInput() - 1};
         }
-        if (jeu.equals("Puissance4")) {
-            int[] val = new int[1];
-            val[0] = getIntInput() - 1;
-            return val;
-        }
-        return null;
+        return new int[]{0, 0};
     }
 }

@@ -5,10 +5,12 @@ public abstract class Jeu {
     public int tourJoueur = 1;
 
     public void lancer(int ligne, int col) {
+        // Initialisation de la grille
         grille = new int[ligne][col];
     }
 
     public void setGrille(int ligne, int col) {
+        // La case choisie est assignée au joueur actuel
         grille[ligne][col] = tourJoueur;
     }
 
@@ -17,9 +19,9 @@ public abstract class Jeu {
         StringBuilder message = new StringBuilder();
         for (int[] ligne : grille) {
             message.append("|");
-            for (int caseGrille : ligne) {
-                symbole = caseGrille == 1 ? "o" : "x";
-                if (caseGrille != 0) message.append(symbole).append("|");
+            for (int cellule : ligne) {
+                symbole = cellule == 1 ? "o" : "x";
+                if (cellule != 0) message.append(symbole).append("|");
                 else message.append(" |");
             }
             message.append("\n");
@@ -27,11 +29,13 @@ public abstract class Jeu {
         return message.toString();
     }
 
-    // Méthode pour compter les cases vides (utile pour MinMax)
+    // Compte le nombre de cases encore vides dans la grille
     public int compterCasesVides() {
         int vides = 0;
         for (int[] ligne : grille) {
-            for (int c : ligne) if (c == 0) vides++;
+            for (int cellule : ligne) {
+                if (cellule == 0) vides++;
+            }
         }
         return vides;
     }
