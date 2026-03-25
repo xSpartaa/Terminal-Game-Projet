@@ -20,7 +20,9 @@ public abstract class Jeu {
         for (int[] ligne : grille) {
             message.append("|");
             for (int cellule : ligne) {
-                symbole = cellule == 1 ? "o" : "x";
+                if (this.getClass().getSimpleName().equals("Puissance4")) {
+                    symbole = cellule == 1 ? "\u001B[93mo\u001B[0m" : "\u001B[91mo\u001B[0m";
+                } else symbole = cellule == 1 ? "o" : "x";
                 if (cellule != 0) message.append(symbole).append("|");
                 else message.append(" |");
             }
