@@ -27,11 +27,22 @@ public class Ihm {
     public int[] choixCoup(String jeuNom) {
         if (jeuNom.equals("Morpion")) {
             String[] saisie = getStringInput().split(" ");
-            if (saisie.length == 2) return new int[]{Integer.parseInt(saisie[0]), Integer.parseInt(saisie[1])};
             if (saisie[0].equals("999")) return new int[]{999, 999};
+            if (saisie.length == 2) {
+                try {
+                    int ligne = Integer.parseInt(saisie[0]);
+                    int col = Integer.parseInt(saisie[1]);
+                    return new int[]{ligne, col};
+                } catch (NumberFormatException e) {
+                    print("Saisie invalide, entrez deux chiffres séparés par un espace (ex: 1 2)");
+                    return choixCoup(jeuNom); // Redemande à l'utilisateur
+                }
+            } else {
+                print("Format invalide, entrez deux chiffres séparés par un espace (ex: 1 2)");
+                return choixCoup(jeuNom);
+            }
         } else {
             return new int[]{getIntInput() - 1};
         }
-        return new int[]{0, 0};
     }
 }
