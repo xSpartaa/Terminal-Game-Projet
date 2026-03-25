@@ -36,7 +36,7 @@ public class Controleur {
             ligne = coup[0];
             col = coup[1];
         } else {
-            // Saisi Humain (Morpion)
+            // Saisi Joueur (Morpion)
             if (jeu instanceof Morpion) {
                 ihm.print("Choisissez votre coup (Ligne + Colonne):");
                 int[] coups = ihm.choixCoup("Morpion");
@@ -48,7 +48,7 @@ public class Controleur {
                     ligne = coups[0]-1; col = coups[1]-1;
                 }
             }
-            // Saisi Humain (Puissance 4)
+            // Saisi Joueur (Puissance 4)
             else {
                 ihm.print("Choisissez votre colonne :");
                 col = ihm.choixCoup("Puissance4")[0];
