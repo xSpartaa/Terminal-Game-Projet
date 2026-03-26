@@ -114,7 +114,7 @@ public class Controleur {
 
         if (mode == 1) {
             joueur2 = new Joueur("IA", true);// IA nommée "IA"
-            ihm.print("Difficulté de l'IA : [0] Facile ,[1] Difficile");
+            ihm.print("Difficulté de l'IA : [0] Facile ,[1] Difficile"); //choix difficulté
             modeIA = ihm.getIntInput();
 
             while (modeIA != 0  && modeIA != 1) {

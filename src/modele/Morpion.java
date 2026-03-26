@@ -117,7 +117,7 @@ public class Morpion extends Jeu {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 if (grille[i][j] == 0) {
-                    casesVides.add(new int[]{i, j});
+                    casesVides.add(new int[]{i, j});// coup aleatoire
                 }
             }
         }
