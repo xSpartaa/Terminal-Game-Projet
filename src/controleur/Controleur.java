@@ -9,6 +9,7 @@ public class Controleur {
     public Joueur joueurActuel;
     String[] listeJeux = {"Morpion", "Puissance 4"};
     public Jeu jeu;
+    private int modeIA =0;
 
     public Controleur(Ihm ihm) {
         this.ihm = ihm;
@@ -29,7 +30,11 @@ public class Controleur {
         if (joueurActuel.estIA) {
             int[] coup;
             if (jeu instanceof Morpion) {
-                coup = ((Morpion) jeu).calculerCoupIA();
+                if (modeIA ==0) {
+                    coup = ((Morpion) jeu).calculerCoupAleatoireMorpion();
+                }else {
+                    coup = ((Morpion) jeu).calculerCoupIA();
+                }
             } else {
                 coup = ((Puissance4) jeu).calculerCoupAleatoire();
             }
@@ -93,7 +98,7 @@ public class Controleur {
     }
 
     public void creerJoueurs() {
-        // Joueur 1 [cite: 9]
+        // Joueur 1
         ihm.print("Nom du Joueur 1 :");
         joueur1 = new Joueur(ihm.getStringInput(), false);
 
@@ -108,7 +113,17 @@ public class Controleur {
         }
 
         if (mode == 1) {
-            joueur2 = new Joueur("IA", true); // IA nommée "IA"
+            joueur2 = new Joueur("IA", true);// IA nommée "IA"
+            ihm.print("Difficulté de l'IA : [0] Facile ,[1] Difficile");
+            modeIA = ihm.getIntInput();
+
+            while (modeIA != 0  && modeIA != 1) {
+                ihm.print("Mauvais valeur entrée");
+                ihm.print("Choisissez votre mode :");
+                modeIA = ihm.getIntInput();
+            }
+
+
         } else {
             ihm.print("Nom du Joueur 2 :"); //
             String nom = ihm.getStringInput();

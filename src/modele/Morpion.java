@@ -1,5 +1,8 @@
 package modele;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 public class Morpion extends Jeu {
 
 
@@ -107,5 +110,17 @@ public class Morpion extends Jeu {
                     if(grille[i][j] == 0) { grille[i][j] = 1; scoreS = Math.min(scoreS, minMax(true)); grille[i][j] = 0; }
         }
         return scoreS;
+    }
+
+    public int[] calculerCoupAleatoireMorpion() {
+        ArrayList<int[]> casesVides = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (grille[i][j] == 0) {
+                    casesVides.add(new int[]{i, j});
+                }
+            }
+        }
+        return casesVides.get(new Random().nextInt(casesVides.size()));
     }
 }
