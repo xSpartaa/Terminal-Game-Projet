@@ -28,7 +28,7 @@ public class Controleur {
     private void jouerUnePartie() {
         int choix = ihm.choisirJeu();
         Jeu jeu = (choix == 1) ? new Morpion() : new Puissance4();
-        Difficulte diff = contreIA ? ihm.demanderDifficulte() : Difficulte.FACILE;
+        Difficulte diff = contreIA ? ihm.demanderDifficulte() : Difficulte.DIFFICILE ;
 
         boolean tourJ1 = true;
         while (!jeu.estPlein()) {
