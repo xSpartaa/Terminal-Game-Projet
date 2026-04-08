@@ -52,11 +52,11 @@ public class Morpion extends Jeu {
 
     @Override
     public String genererCoupIA(Difficulte diff, String symIA, String symAdv) {
-        {
+
         Random r = new Random();
         int l, c;
         do { l = r.nextInt(3); c = r.nextInt(3); } while (!plateau[l][c].equals(" "));
-        return (l + 1) + " " + (c + 1);}
+        return (l + 1) + " " + (c + 1);
 
     }
 }
