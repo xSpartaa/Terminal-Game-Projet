@@ -67,12 +67,25 @@ public class Ihm {
     }
 
     public boolean rejouer() {
-        System.out.print("Rejouer ? (o/n) : ");
-        return sc.nextLine().trim().toLowerCase().startsWith("o");
+        while (true) {
+            System.out.print("Rejouer ? (o/n) : ");
+            String rep = sc.nextLine().trim().toLowerCase();
+            if (rep.equals("o")) return true;
+            if (rep.equals("n")) return false;
+            System.out.println("Erreur : Veuillez répondre par 'o' pour oui ou 'n' pour non.");
+        }
     }
 
     // Autres méthodes déjà fournies (demanderSiIA, saisirCoup, etc.)
-    public boolean demanderSiIA() { System.out.print("Contre l'IA ? (o/n) : "); return sc.nextLine().trim().toLowerCase().startsWith("o"); }
+    public boolean demanderSiIA() {
+        while (true) {
+            System.out.print("Contre l'IA ? (o/n) : ");
+            String rep = sc.nextLine().trim().toLowerCase();
+            if (rep.equals("o")) return true;
+            if (rep.equals("n")) return false;
+            System.out.println("Erreur : Veuillez répondre par 'o' pour oui ou 'n' pour non.");
+        }
+    }
     public Difficulte demanderDifficulte() { System.out.print("Niveau (1: Facile, 2: Difficile) : "); return sc.nextLine().equals("1") ? Difficulte.FACILE : Difficulte.DIFFICILE; }
     public String saisirCoup(String nom, String format) { System.out.print(nom + " (" + format + ") : "); return sc.nextLine().trim(); }
     public void messageErreurCoup() { System.out.println("Coup invalide !"); }
