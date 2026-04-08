@@ -1,35 +1,74 @@
 package modele;
-import java.util.ArrayList;
+
+import java.util.Arrays;
 import java.util.Random;
 
 public class Puissance4 extends Jeu {
-
-    public Puissance4() {}
-
-    public int verifierGagnant() {
-        int casesLibres = 0;
-        for (int l = 0; l < grille.length; l++) {
-            for (int c = 0; c < grille[l].length; c++) {
-                if (grille[l][c] != 0) {
-                    // Vérifications (Lignes, Colonnes, Diagonales)
-                    if (c + 3 < grille[l].length && grille[l][c] == grille[l][c+1] && grille[l][c] == grille[l][c+2] && grille[l][c] == grille[l][c+3]) return grille[l][c];
-                    if (l + 3 < grille.length && grille[l][c] == grille[l+1][c] && grille[l][c] == grille[l+2][c] && grille[l][c] == grille[l+3][c]) return grille[l][c];
-                    if (l + 3 < grille.length && c + 3 < grille[l].length && grille[l][c] == grille[l+1][c+1] && grille[l][c] == grille[l+2][c+2] && grille[l][c] == grille[l+3][c+3]) return grille[l][c];
-                    if (l - 3 >= 0 && c + 3 < grille[l].length && grille[l][c] == grille[l-1][c+1] && grille[l][c] == grille[l-2][c+2] && grille[l][c] == grille[l-3][c+3]) return grille[l][c];
-                } else casesLibres++;
-            }
-        }
-        return casesLibres == 0 ? 3 : 0;
+    public Puissance4() {
+        this.nbLignes = 6;
+        this.nbColonnes = 7;
+        this.plateau = new String[6][7];
+        for (int i = 0; i < 6; i++) Arrays.fill(plateau[i], " ");
     }
 
-    public int[] calculerCoupAleatoire() {
-        ArrayList<Integer> colonnesValides = new ArrayList<>();
-        for (int c = 0; c < grille[0].length; c++) {
-            if (grille[0][c] == 0) colonnesValides.add(c);
+    @Override
+    public boolean coupValide(String saisie) {
+        if (saisie == null || !saisie.matches("\\d+")) return false;
+        try {
+            int c = Integer.parseInt(saisie) - 1;
+            return c >= 0 && c < 7 && plateau[0][c].equals(" ");
+        } catch (NumberFormatException e) { return false; }
+    }
+
+    @Override
+    public void jouerCoup(String saisie, String symbole) {
+        int c = Integer.parseInt(saisie) - 1;
+        for (int i = 5; i >= 0; i--) {
+            if (plateau[i][c].equals(" ")) {
+                plateau[i][c] = symbole; // On stocke le symbole du joueur (X ou O)
+                break;
+            }
         }
-        int col = colonnesValides.get(new Random().nextInt(colonnesValides.size()));
-        int ligne = grille.length - 1;
-        while (grille[ligne][col] != 0) ligne--;
-        return new int[]{ligne, col};
+    }
+
+    @Override
+    public boolean estGagnant(String s) {
+        for (int l=0; l< plateau.length; l++) {
+            for (int c = 0; c < plateau[l].length; c++) {
+                if (plateau[l][c] != " ") {
+                    // Horizontal
+                    if (c + 3 < plateau[l].length && plateau[l][c] == plateau[l][c + 1] && plateau[l][c] == plateau[l][c + 2] && plateau[l][c] == plateau[l][c + 3])
+                        return true;
+                    // Vertical
+                    if (l + 3 < plateau.length && plateau[l][c] == plateau[l + 1][c] && plateau[l][c] == plateau[l + 2][c] && plateau[l][c] == plateau[l + 3][c])
+                        return true;
+                    // Diagonales
+                    if (l - 3 >= 0 && c + 3 < plateau[l].length && plateau[l][c] == plateau[l - 1][c + 1] && plateau[l][c] == plateau[l - 2][c + 2] && plateau[l][c] == plateau[l - 3][c + 3])
+                        return true;
+                    if (l + 3 < plateau.length && c + 3 < plateau[l].length && plateau[l][c] == plateau[l + 1][c + 1] && plateau[l][c] == plateau[l + 2][c + 2] && plateau[l][c] == plateau[l + 3][c + 3])
+                        return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean estPlein() {
+        for (int j = 0; j < 7; j++) if (plateau[0][j].equals(" ")) return false;
+        return true;
+    }
+
+    @Override
+    public String getFormatSaisie() { return "colonne (1-7)"; }
+
+    @Override
+    public String genererCoupIA(Difficulte diff, String symIA, String symAdv) {
+        // IA Facile = Aléatoire
+        // IA Difficile = Évaluation offensive/défensive
+        Random r = new Random();
+        int c;
+        do { c = r.nextInt(7); } while (!plateau[0][c].equals(" "));
+        return String.valueOf(c + 1);
     }
 }

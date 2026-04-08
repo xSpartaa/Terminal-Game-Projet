@@ -1,111 +1,60 @@
 package modele;
 
+import java.util.Random;
+
 public class Morpion extends Jeu {
-
-
     public Morpion() {
-
+        this.nbLignes = 3;
+        this.nbColonnes = 3;
+        this.plateau = new String[3][3];
+        for (int i = 0; i < 3; i++)
+            for (int j = 0; j < 3; j++) plateau[i][j] = " ";
     }
 
-    public int verifierGagnant() {
-        // Vérification des lignes
+    @Override
+    public boolean coupValide(String saisie) {
+        if (saisie == null || !saisie.matches("\\d+\\s+\\d+")) return false;
+        String[] parts = saisie.split("\\s+");
+        try {
+            int l = Integer.parseInt(parts[0]) - 1;
+            int c = Integer.parseInt(parts[1]) - 1;
+            return l >= 0 && l < 3 && c >= 0 && c < 3 && plateau[l][c].equals(" ");
+        } catch (NumberFormatException e) { return false; }
+    }
+
+    @Override
+    public void jouerCoup(String saisie, String symbole) {
+        String[] parts = saisie.split("\\s+");
+        int l = Integer.parseInt(parts[0]) - 1;
+        int c = Integer.parseInt(parts[1]) - 1;
+        plateau[l][c] = symbole;
+    }
+
+    @Override
+    public boolean estGagnant(String s) {
         for (int i = 0; i < 3; i++) {
-            if (grille[i][0] == grille[i][1] && grille[i][1] == grille[i][2] && grille[i][0] != 0) return grille[i][0];
+            if (plateau[i][0].equals(s) && plateau[i][1].equals(s) && plateau[i][2].equals(s)) return true;
+            if (plateau[0][i].equals(s) && plateau[1][i].equals(s) && plateau[2][i].equals(s)) return true;
         }
-        // Vérification des colonnes
-        for (int i = 0; i < 3; i++) {
-            if (grille[0][i] == grille[1][i] && grille[1][i] == grille[2][i] && grille[0][i] != 0) return grille[0][i];
-        }
-        // Diagonales
-        if (grille[0][0] == grille[1][1] && grille[1][1] == grille[2][2] && grille[0][0] != 0) return grille[0][0];
-        if (grille[0][2] == grille[1][1] && grille[1][1] == grille[2][0] && grille[0][2] != 0) return grille[0][2];
-
-        return compterCasesVides() == 0 ? 3 : 0; // 3 = Match nul
+        return (plateau[0][0].equals(s) && plateau[1][1].equals(s) && plateau[2][2].equals(s)) ||
+                (plateau[0][2].equals(s) && plateau[1][1].equals(s) && plateau[2][0].equals(s));
     }
 
-    public int[] calculerCoupIA() {
-        // Si 4 cases vides ou moins, on utilise MinMax
-        if (compterCasesVides() <= 4) {
-            return algorithmeMinMax();
-        }
-        // Sinon, on applique les règles heuristiques
-        return reglesHeuristiques();
+    @Override
+    public boolean estPlein() {
+        for (String[] ligne : plateau)
+            for (String caseP : ligne) if (caseP.equals(" ")) return false;
+        return true;
     }
 
-    private int[] reglesHeuristiques() {
-        // Ordre : Gagner > Bloquer > Centre > Coin > Côté > Première vide
+    @Override
+    public String getFormatSaisie() { return "ligne colonne (ex: 2 1)"; }
 
-        // 1 & 2 : Gagner ou Bloquer (Simulation)
-        int[] coup = simulationCoup(2); // Gagner (IA = Joueur 2)
-        if (coup != null) return coup;
-        coup = simulationCoup(1); // Bloquer (Joueur 1)
-        if (coup != null) return coup;
-
-        // 3 : Centre
-        if (grille[1][1] == 0) return new int[]{1, 1};
-
-        // 4 : Coin
-        int[][] coins = {{0,0}, {0,2}, {2,0}, {2,2}};
-        for (int[] c : coins) if (grille[c[0]][c[1]] == 0) return c;
-
-        // 5 : Côté
-        int[][] cotes = {{0,1}, {1,0}, {1,2}, {2,1}};
-        for (int[] c : cotes) if (grille[c[0]][c[1]] == 0) return c;
-
-        return null;
-    }
-
-    private int[] simulationCoup(int j) {
-        for(int i=0; i<3; i++) {
-            for(int k=0; k<3; k++) {
-                if(grille[i][k] == 0) {
-                    grille[i][k] = j;
-                    if(verifierGagnant() == j) { grille[i][k] = 0; return new int[]{i, k}; }
-                    grille[i][k] = 0;
-                }
-            }
-        }
-        return null;
-    }
-
-    private int[] algorithmeMinMax() {
-        int meilleurScore = Integer.MIN_VALUE;
-        int[] meilleurCoup = new int[2];
-
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                if (grille[i][j] == 0) {
-                    grille[i][j] = 2; // IA joue
-                    int score = minMax(false);
-                    grille[i][j] = 0;
-                    if (score > meilleurScore) {
-                        meilleurScore = score;
-                        meilleurCoup = new int[]{i, j};
-                    }
-                }
-            }
-        }
-        return meilleurCoup;
-    }
-
-    private int minMax(boolean estMax) {
-        int resultat = verifierGagnant();
-        if (resultat == 2) return 1;  // IA gagne
-        if (resultat == 1) return -1; // IA perd
-        if (resultat == 3) return 0;  // Nul
-
-        int scoreS;
-        if (estMax) {
-            scoreS = Integer.MIN_VALUE;
-            for(int i=0; i<3; i++)
-                for(int j=0; j<3; j++)
-                    if(grille[i][j] == 0) { grille[i][j] = 2; scoreS = Math.max(scoreS, minMax(false)); grille[i][j] = 0; }
-        } else {
-            scoreS = Integer.MAX_VALUE;
-            for(int i=0; i<3; i++)
-                for(int j=0; j<3; j++)
-                    if(grille[i][j] == 0) { grille[i][j] = 1; scoreS = Math.min(scoreS, minMax(true)); grille[i][j] = 0; }
-        }
-        return scoreS;
+    @Override
+    public String genererCoupIA(Difficulte diff, String symIA, String symAdv) {
+        Random r = new Random();
+        int l, c;
+        do { l = r.nextInt(3); c = r.nextInt(3); } while (!plateau[l][c].equals(" "));
+        return (l + 1) + " " + (c + 1);
     }
 }

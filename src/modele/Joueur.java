@@ -1,20 +1,18 @@
 package modele;
 
 public class Joueur {
-    public String nom;
-    private int partiesGagnees = 0;
-    public boolean estIA; // Indique si le joueur est piloté par l'ordinateur
+    private String nom;
+    private String symbole;
+    private int nombreVictoires; // Pour le bilan final
 
-    public Joueur(String nom, boolean estIA) {
+    public Joueur(String nom, String symbole) {
         this.nom = nom;
-        this.estIA = estIA;
+        this.symbole = symbole;
+        this.nombreVictoires = 0;
     }
 
-    public int getPartiesGagnees() {
-        return partiesGagnees;
-    }
-
-    public void setPartiesGagnees(int partiesGagnees) {
-        this.partiesGagnees = partiesGagnees;
-    }
+    public String getNom() { return nom; }
+    public String getSymbole() { return symbole; }
+    public int getNombreVictoires() { return nombreVictoires; }
+    public void incrementerVictoires() { this.nombreVictoires++; }
 }
