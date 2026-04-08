@@ -70,5 +70,5 @@ public class Puissance4 extends Jeu {
         int c;
         do { c = r.nextInt(7); } while (!plateau[0][c].equals(" "));
         return String.valueOf(c + 1);
-    }
+    } try
 }
