@@ -70,10 +70,15 @@ public class Morpion extends Jeu {
         for (int[] c : coins) if (plateau[c[0]-1][c[1]-1].equals(" ")) return c[0] + " " + c[1];
 
         // 5. Coter
-
+        int[][] cotes = {{0,1}, {1,0}, {1,2}, {2,1}};
+        for (int[] c : cotes) if (plateau[c[0]][c[1]] == " ") return c[0] + " " + c[1];
 
         // 6 .Premiere vide
-
+        for(int i=0; i<plateau.length; i++) {
+            for(int k=0; k<plateau[i].length; k++) {
+                if (plateau[i][k] == " ") return i + " " + k;
+            }
+        }
         return coupAleatoire();
     }
 
