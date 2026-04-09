@@ -65,11 +65,24 @@ public class Ihm {
     }
 
     public boolean rejouer() {
-        System.out.print("Rejouer ? (o/n) : ");
-        return sc.nextLine().toLowerCase().startsWith("o");
+        while (true) {
+            System.out.print("Rejouer ? (o/n) : ");
+            String rep = sc.nextLine().trim().toLowerCase();
+            if (rep.equals("o")) return true;
+            if (rep.equals("n")) return false;
+            System.out.println("Erreur : Veuillez répondre par 'o' pour oui ou 'n' pour non.");}
+
     }
 
-    public boolean contreIA() { System.out.print("Contre IA ? (o/n) : "); return sc.nextLine().toLowerCase().startsWith("o"); }
+    public boolean contreIA() {
+        while (true) {
+        System.out.print("Contre l'IA ? (o/n) : ");
+        String rep = sc.nextLine().trim().toLowerCase();
+        if (rep.equals("o")) return true;
+        if (rep.equals("n")) return false;
+        System.out.println("Erreur : Veuillez répondre par 'o' pour oui ou 'n' pour non.");
+        }
+    }
     public Difficulte demanderDifficulte() { System.out.print("Difficulté (1: Facile, 2: Difficile) : "); return sc.nextLine().equals("2") ? Difficulte.DIFFICILE : Difficulte.FACILE; }
     public String saisirCoup(String n, String f) { System.out.print(n + " (" + f + ") : "); return sc.nextLine().trim(); }
     public void erreurCoup() { System.out.println("Coup invalide !"); }

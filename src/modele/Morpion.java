@@ -69,6 +69,11 @@ public class Morpion extends Jeu {
         int[][] coins = {{1,1}, {1,3}, {3,1}, {3,3}};
         for (int[] c : coins) if (plateau[c[0]-1][c[1]-1].equals(" ")) return c[0] + " " + c[1];
 
+        // 5. Coter
+
+
+        // 6 .Premiere vide
+
         return coupAleatoire();
     }
 
