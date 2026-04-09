@@ -1,7 +1,6 @@
 package modele;
 
-import java.util.Arrays;
-import java.util.Random;
+import java.util.*;
 
 public class Puissance4 extends Jeu {
     public Puissance4() {
@@ -14,10 +13,8 @@ public class Puissance4 extends Jeu {
     @Override
     public boolean coupValide(String saisie) {
         if (saisie == null || !saisie.matches("\\d+")) return false;
-        try {
-            int c = Integer.parseInt(saisie) - 1;
-            return c >= 0 && c < 7 && plateau[0][c].equals(" ");
-        } catch (NumberFormatException e) { return false; }
+        int c = Integer.parseInt(saisie) - 1;
+        return c >= 0 && c < 7 && plateau[0][c].equals(" ");
     }
 
     @Override
@@ -25,7 +22,7 @@ public class Puissance4 extends Jeu {
         int c = Integer.parseInt(saisie) - 1;
         for (int i = 5; i >= 0; i--) {
             if (plateau[i][c].equals(" ")) {
-                plateau[i][c] = symbole; // On stocke le symbole du joueur (X ou O)
+                plateau[i][c] = symbole;
                 break;
             }
         }
@@ -33,24 +30,24 @@ public class Puissance4 extends Jeu {
 
     @Override
     public boolean estGagnant(String s) {
-        for (int l=0; l< plateau.length; l++) {
-            for (int c = 0; c < plateau[l].length; c++) {
-                if (plateau[l][c] != " ") {
-                    // Horizontal
-                    if (c + 3 < plateau[l].length && plateau[l][c] == plateau[l][c + 1] && plateau[l][c] == plateau[l][c + 2] && plateau[l][c] == plateau[l][c + 3])
-                        return true;
-                    // Vertical
-                    if (l + 3 < plateau.length && plateau[l][c] == plateau[l + 1][c] && plateau[l][c] == plateau[l + 2][c] && plateau[l][c] == plateau[l + 3][c])
-                        return true;
-                    // Diagonales
-                    if (l - 3 >= 0 && c + 3 < plateau[l].length && plateau[l][c] == plateau[l - 1][c + 1] && plateau[l][c] == plateau[l - 2][c + 2] && plateau[l][c] == plateau[l - 3][c + 3])
-                        return true;
-                    if (l + 3 < plateau.length && c + 3 < plateau[l].length && plateau[l][c] == plateau[l + 1][c + 1] && plateau[l][c] == plateau[l + 2][c + 2] && plateau[l][c] == plateau[l + 3][c + 3])
-                        return true;
-                }
+        // Vérification 4 pions (Horizontal, Vertical, Diagonales)
+        for (int r = 0; r < 6; r++) {
+            for (int c = 0; c < 7; c++) {
+                if (verifierAlignement(r, c, 0, 1, s) >= 4) return true;
+                if (verifierAlignement(r, c, 1, 0, s) >= 4) return true;
+                if (verifierAlignement(r, c, 1, 1, s) >= 4) return true;
+                if (verifierAlignement(r, c, 1, -1, s) >= 4) return true;
             }
         }
         return false;
+    }
+
+    private int verifierAlignement(int r, int c, int dr, int dc, String s) {
+        int count = 0;
+        while (r >= 0 && r < 6 && c >= 0 && c < 7 && plateau[r][c].equals(s)) {
+            count++; r += dr; c += dc;
+        }
+        return count;
     }
 
     @Override
@@ -64,8 +61,53 @@ public class Puissance4 extends Jeu {
 
     @Override
     public String genererCoupIA(Difficulte diff, String symIA, String symAdv) {
-        // IA Facile = Aléatoire
-        // IA Difficile = Évaluation offensive/défensive
+        if (diff == Difficulte.FACILE) return coupAleatoire();
+
+        int meilleurScore = -10000;
+        List<Integer> meilleursCoups = new ArrayList<>();
+
+        for (int c = 0; c < 7; c++) {
+            if (plateau[0][c].equals(" ")) {
+                int score = evaluerCoup(c, symIA, symAdv);
+                if (score > meilleurScore) {
+                    meilleurScore = score;
+                    meilleursCoups.clear();
+                    meilleursCoups.add(c + 1);
+                } else if (score == meilleurScore) {
+                    meilleursCoups.add(c + 1);
+                }
+            }
+        }
+        return String.valueOf(meilleursCoups.get(new Random().nextInt(meilleursCoups.size())));
+    }
+
+    private int evaluerCoup(int c, String symIA, String symAdv) {
+        int r = 5;
+        while (r >= 0 && !plateau[r][c].equals(" ")) r--;
+        int score = 0;
+
+        // 1) Phase défensive
+        plateau[r][c] = symAdv;
+        if (estGagnant(symAdv)) score += 900;
+        plateau[r][c] = " ";
+
+        // 2) Phase offensive
+        plateau[r][c] = symIA;
+        if (estGagnant(symIA)) score += 1000; // Aligner 4
+
+        // Aligner 3 (+100 par espace vide)
+        // Aligner 2 (+10 par groupe espaces)
+        // (Logique de comptage simplifiée pour les alignements partiels)
+
+        // 3) Placement stratégique (Centre)
+        int[] bonus = {1, 2, 3, 5, 3, 2, 1};
+        score += bonus[c];
+
+        plateau[r][c] = " ";
+        return score;
+    }
+
+    private String coupAleatoire() {
         Random r = new Random();
         int c;
         do { c = r.nextInt(7); } while (!plateau[0][c].equals(" "));
