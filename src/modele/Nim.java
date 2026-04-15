@@ -1,5 +1,9 @@
 package modele;
 
+import java.util.BitSet;
+import java.util.Random;
+import java.util.function.BinaryOperator;
+
 /**
  * <p>La classe Nim représente l'état courant de la partie
  * Elle est caractérisée par un tableau. Chaque case du tableau enregistre le nombre d'allumettes de chaque tas.
@@ -65,7 +69,9 @@ public class Nim extends Jeu{
     @Override
     public String toString() {
         String s="";
+        int k=0;
         for (int nbAllumettes : lesTas) {
+            s += ++k + " ";
             for (int i = 1; i <= nbAllumettes; i++) {
                 s+="| ";
             }
@@ -98,11 +104,41 @@ public class Nim extends Jeu{
 
     @Override
     public String genererCoupIA(Difficulte diff, String symIA, String symAdv) {
-        return "";
+        if (diff == Difficulte.FACILE) {
+            Random r = new Random();
+            int l = r.nextInt(3-1)+1;
+            while (lesTas[l-1] == 0) {l = r.nextInt(3-1)+1;             System.out.println(l); }
+
+            int nb = 1;
+            if ( lesTas[l-1] > l) {nb = r.nextInt(lesTas[l-1]-1)+1;}
+            return l + " " + nb;
+        }else if (diff == Difficulte.DIFFICILE) {
+            int xor=0;
+            for (int n = 1;n <= lesTas.length;n++) {
+                if (lesTas[n-1] > 0) {
+                    int m = lesTas[n-1];
+                    xor += n^ m;
+                    System.out.println(xor);
+                }
+            }
+            System.out.println("--------------------------");
+            if (xor == 0) { for (int n = 1 ;n <= lesTas.length;n++) { if (lesTas[n] > 0) return n + " " + 1;}
+            } else {
+                for (int n = 0 ;n < lesTas.length;n++) {
+                    if (lesTas[n] > 0) {
+                        int tempXor = xor ^ lesTas[n];
+                        System.out.println(tempXor);
+                        if (tempXor < lesTas[n]) return (n + 1 + " " + (lesTas[n] - tempXor));
+                    }
+                }
+            }
+        }
+        System.out.println("null");
+        return "1 1";
     }
 
     @Override
     public String getFormatSaisie() {
-        return "";
+        return "Numéros de tas | nombre d'allumettes (ex : 3 2 )";
     }
 }
