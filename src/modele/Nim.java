@@ -30,7 +30,9 @@ public class Nim extends Jeu{
      * Retourne vrai si la partie est terminée et faux sinon
      * @return
      */
-    public boolean partieTerminee() {
+
+    @Override
+    public boolean estGagnant(String symbole) {
         return nbAllumette() == 0;
     }
 
@@ -86,19 +88,20 @@ public class Nim extends Jeu{
     }
 
     @Override
-    public boolean coupValide(String saisie) {
-        return false;
-    }
+    public boolean coupValide(String saisie) {return true;}
 
     @Override
     public void jouerCoup(String saisie, String symbole) {
         String[] saisis = saisie.split(" ");
+        int numeroTas = Integer.parseInt(saisis[0]);
+        int nbAllumettes = Integer.parseInt(saisis[1]);
+
+        try {
+            gererCoup(numeroTas, nbAllumettes);
+        } catch (Exception ignored) {}
     }
 
-    @Override
-    public boolean estGagnant(String symbole) {
-        return false;
-    }
+
 
     @Override
     public boolean estPlein() {

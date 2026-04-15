@@ -26,7 +26,8 @@ public class Controleur {
     }
 
     private void jouerPartie() {
-        Jeu jeu = (ihm.choisirJeu() == 1) ? new Morpion() : (ihm.choisirJeu() == 2) ? new Puissance4() : new Nim() ;
+        int choice = ihm.choisirJeu();
+        Jeu jeu = (choice == 1) ? new Morpion() : (choice == 2) ? new Puissance4() : new Nim() ;
         Difficulte diff = modeIA ? ihm.demanderDifficulte() : Difficulte.FACILE;
 
         boolean tourJ1 = true;
