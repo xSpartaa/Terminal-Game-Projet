@@ -5,10 +5,10 @@ public abstract class Jeu {
     protected int nbLignes;
     protected int nbColonnes;
 
-    public abstract boolean coupValide(String saisie);
+    public boolean coupValide(String saisie) {return false;};
     public abstract void jouerCoup(String saisie, String symbole);
     public abstract boolean estGagnant(String symbole);
-    public abstract boolean estPlein();
+    public boolean estPlein() {return false;};
     public abstract String genererCoupIA(Difficulte diff, String symIA, String symAdv);
     public abstract String getFormatSaisie();
 

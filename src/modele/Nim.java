@@ -15,6 +15,10 @@ public class Nim extends Jeu{
      */
     private int[] lesTas=new int[3];
 
+    public Nim() {
+        initialiser();
+    }
+
 
     /**
      * ajoute les allumettes dans chacun des tas de la manière suivante :
@@ -70,6 +74,15 @@ public class Nim extends Jeu{
         return s;
     }
 
+    @Override
+    public void jouerCoup(String saisie, String symbole) {
+        String[] saisis = saisie.split(" ");
+        int numeroTas = Integer.parseInt(saisis[0]);
+        int nbAllumettes = Integer.parseInt(saisis[1]);
+        try {
+            gererCoup(numeroTas, nbAllumettes);
+        } catch (Exception ignored) {}
+    }
 
     /**
      * modifie l'état de la partie en fonction du coup passé en paramètre
@@ -77,6 +90,7 @@ public class Nim extends Jeu{
      * @param nbAllumettes le nombre d'allumettes doit être compris entre 1 et le nombre d'allumettes présentes dans le tas
      * @throws CoupInvalideException si le coup est invalide
      */
+
     public void gererCoup(int numeroTas, int nbAllumettes) throws CoupInvalideException {
 
         if (numeroTas >= 1 && numeroTas <= lesTas.length && nbAllumettes >= 1 && nbAllumettes <= nbAllumettes(numeroTas)) {
@@ -85,27 +99,6 @@ public class Nim extends Jeu{
         } else {
             throw new CoupInvalideException("Le coup est invalide, rejouez");
         }
-    }
-
-    @Override
-    public boolean coupValide(String saisie) {return true;}
-
-    @Override
-    public void jouerCoup(String saisie, String symbole) {
-        String[] saisis = saisie.split(" ");
-        int numeroTas = Integer.parseInt(saisis[0]);
-        int nbAllumettes = Integer.parseInt(saisis[1]);
-
-        try {
-            gererCoup(numeroTas, nbAllumettes);
-        } catch (Exception ignored) {}
-    }
-
-
-
-    @Override
-    public boolean estPlein() {
-        return false;
     }
 
     @Override

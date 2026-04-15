@@ -35,6 +35,9 @@ public class Ihm {
 
     public void afficherPlateau(Jeu jeu, String s1, String s2) {
         System.out.println();
+
+        if (jeu instanceof Nim ) System.out.println(jeu.toString());
+
         for (int i = 0; i < jeu.getNbLignes(); i++) {
             for (int j = 0; j < jeu.getNbColonnes(); j++) {
                 String p = jeu.getPlateau()[i][j];
