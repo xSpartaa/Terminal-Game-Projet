@@ -5,7 +5,7 @@ public abstract class Jeu {
     protected int nbLignes;
     protected int nbColonnes;
 
-    public boolean coupValide(String saisie) {return false;};
+    public abstract boolean coupValide(String saisie) ;
     public abstract void jouerCoup(String saisie, String symbole);
     public abstract boolean estGagnant(String symbole);
     public boolean estPlein() {return false;};

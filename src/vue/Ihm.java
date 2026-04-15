@@ -28,7 +28,7 @@ public class Ihm {
         while (true) {
             System.out.print("Jeu (1: Morpion, 2: Puissance 4, 3: Nim) : ");
             String c = sc.nextLine();
-            if (c.equals("1") || c.equals("2")) return Integer.parseInt(c);
+            if (c.equals("1") || c.equals("2") || c.equals("3")) return Integer.parseInt(c);
             System.out.println("Choix invalide !");
         }
     }

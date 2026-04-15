@@ -75,31 +75,26 @@ public class Nim extends Jeu{
     }
 
     @Override
+    public boolean coupValide(String saisie) {
+        String[] saisis = saisie.split(" ");
+        int numeroTas = Integer.parseInt(saisis[0]);
+        int nbAllumettes = Integer.parseInt(saisis[1]);
+        if (numeroTas >= 1 && numeroTas <= lesTas.length && nbAllumettes >= 1 && nbAllumettes <= nbAllumettes(numeroTas)) return true;
+        return false;
+    }
+
+    @Override
     public void jouerCoup(String saisie, String symbole) {
         String[] saisis = saisie.split(" ");
         int numeroTas = Integer.parseInt(saisis[0]);
         int nbAllumettes = Integer.parseInt(saisis[1]);
-        try {
-            gererCoup(numeroTas, nbAllumettes);
-        } catch (Exception ignored) {}
-    }
-
-    /**
-     * modifie l'état de la partie en fonction du coup passé en paramètre
-     * @param numeroTas le numéro du tas doit être compris entre 1 et le nombre de tas
-     * @param nbAllumettes le nombre d'allumettes doit être compris entre 1 et le nombre d'allumettes présentes dans le tas
-     * @throws CoupInvalideException si le coup est invalide
-     */
-
-    public void gererCoup(int numeroTas, int nbAllumettes) throws CoupInvalideException {
-
+        System.out.println(numeroTas + " " + nbAllumettes);
         if (numeroTas >= 1 && numeroTas <= lesTas.length && nbAllumettes >= 1 && nbAllumettes <= nbAllumettes(numeroTas)) {
             lesTas[numeroTas - 1] -= nbAllumettes;
 
-        } else {
-            throw new CoupInvalideException("Le coup est invalide, rejouez");
         }
     }
+
 
     @Override
     public String genererCoupIA(Difficulte diff, String symIA, String symAdv) {
