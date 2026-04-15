@@ -82,7 +82,8 @@ public class Nim extends Jeu{
 
     @Override
     public boolean coupValide(String saisie) {
-        String[] saisis = saisie.split(" ");
+        if (saisie == null || !saisie.matches("\\d+\\s+\\d+")) return false;
+        String[] saisis = saisie.split("\\s+");
         int numeroTas = Integer.parseInt(saisis[0]);
         int nbAllumettes = Integer.parseInt(saisis[1]);
         if (numeroTas >= 1 && numeroTas <= lesTas.length && nbAllumettes >= 1 && nbAllumettes <= nbAllumettes(numeroTas)) return true;
@@ -112,12 +113,14 @@ public class Nim extends Jeu{
             int nb = 1;
             if ( lesTas[l-1] > l) {nb = r.nextInt(lesTas[l-1]-1)+1;}
             return l + " " + nb;
+
+
         }else if (diff == Difficulte.DIFFICILE) {
             int xor=0;
             for (int n = 1;n <= lesTas.length;n++) {
                 if (lesTas[n-1] > 0) {
                     int m = lesTas[n-1];
-                    xor += n^ m;
+                    xor ^=m;
                     System.out.println(xor);
                 }
             }
